@@ -1,3 +1,7 @@
-from functions import show_message
+import flet as ft
+from datetime import datetime
+from functions import menyu
+from ast import main
 
-show_message()
+if __name__ == "__main__":
+    main()
