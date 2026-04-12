@@ -36,7 +36,8 @@ def planned_task():
     if taskname=="":
         print("Task name can't be empty!")
         return
-    deadline_sec = int(convert_to_sec())
+    deadline_sec =int(convert_to_sec())
+    pl_task=({"Task":taskname,})
     if deadline_sec:
         pl_task=({"Task":taskname,
                   "Deadline":deadline_sec,
@@ -45,7 +46,7 @@ def planned_task():
         plannedtask.append(pl_task)
     print("\n----Your Daily Task----""\n")
     print(f"Task Name: {taskname}")
-    print(f"Deadline(sec): {deadline_sec // 3600} hour(s)")
+    print(f"Deadline(sec): {deadline_sec//3600} hour(s)")
     print(f"Type: {pl_task['Type']}")
     print(f"Added Date: {pl_task['Added Date']}")
     start = input("Start time ?(y/n):").lower()
@@ -74,7 +75,7 @@ def show_tasks():
     if plannedtask:
         print("---Your Planned Tasks---")
         for i,task in enumerate(plannedtask,1):
-            print(f"{i}. Task: {task['Task']} | Added date : {task['Added Date']} | Deadline : {task['Deadline']}")
+            print(f"{i}. Task: {task['Task']} | Deadline : {task['Deadline']} | Added date : {task['Added Date']} ")
 
 def add_task():
     print("---Add Daily Task---")
@@ -103,7 +104,7 @@ def add_task():
         return
 
 
-def important_task(taskname,deadline):
+def important_task():
      print("----Add an Important Task----")
      taskname=input("Task name: ")
      if not taskname:
@@ -120,6 +121,7 @@ def important_task(taskname,deadline):
          importask.append(im_task)
          print(f"----Your Important Task----""\n")
          print(f"Task Name: {taskname}")
+         print(f"Deadline(sec): {deadline_sec // 3600} hour(s)")
          print(f"Type: {im_task['Type']}")
          print(f"Added Date: {im_task['Added Date']}")
          start=input("Start time ?(y/n):").lower()
