@@ -1,46 +1,53 @@
 from datetime import datetime
+import time
 
 
 dailytask=[]
-imptask=[]
+importanttask=[]
+plannedtask=[]
 
-class Account:
-    def __init__(self,name,email,password):
-        self.name=name
-        self.password=password
-        self.email=email
+def timer():
 
-    def open(self,name,email,password):
-          name=input("Enter your name:")
-          email=input("Enter your email:")
-          password=input("Enter your password:")
-          self.name=name
-          self.email=email
-          self.password=password
-          print(f"You're welcome {name}")
+    try:
+        hours=float(input("Enter deadline for your task(in hours) :"))
+        if hours<0:
+            print("Please enter a positive number of hours")
+            return
+        else:
+            timeframe=int(hours*3600)
+            for deadline in range(timeframe,0,-1):
+                seconds=deadline % 60
+                minutes=(deadline/60) % 60
+                hours=deadline/3600
+                print(f"{hours:.2f}:{minutes:.2f}:{seconds:.2f}")
+                time.sleep(1)
+            print("You're time is up!")
+            print("The goal is uncompleted")
+    except ValueError:
+        print("Invalid input\n Please enter deadline in hours")
 
-    def signup(self,name,password):
+def show_tasks():
+    print("----Your Tasks----")
+    if len(dailytask)==0 or len(importanttask)==0 or len(plannedtask)==0:
+        print("You have no tasks")
 
-        name=input("Enter your name:")
-        password=input("Enter your password:")
-        print(f"We are pleased to see you {name}")
-        self.name=name
-        self.password=password
 
 def add_task(taskname,deadline,):
     print("----Add a Daily Task----")
+
     if not taskname or not deadline:
         print("Task name and deadline are required!")
         return
     else:
+
         task=({"Task":taskname,
-                   "Deadline":deadline,
-                   "Type":"Daily",
-                   "Added Date":datetime.now(),})
+               "Deadline":timer(),
+               "Type":"Daily",
+               "Added Date":datetime.now(),})
         dailytask.append(task)
         print(f"----Your Daily Task----""\n")
         print(f"Task Name: {taskname}")
-        print(f"Deadline: {deadline}")
+        print(f"Deadline: {timer()}")
         print(f"Type: {task['Type']}")
         print(f"Added Date: {task['Added Date']}")
 
@@ -48,10 +55,20 @@ def add_task(taskname,deadline,):
 
 
 def important_task(taskname,deadline):
-
-     imptask.append({"Important task":taskname,"Deadline":deadline})
-     print("Your important task has been added""\n"f"------\nThe Task is {taskname}\n------")
-
+     print("----Add an Important Task----")
+     if not taskname or not deadline:
+         print("Task name and deadline are required!")
+         return
+     else:
+         im_task=({"Task":taskname,
+                   "Deadline":deadline,
+                   "Type":"Important",
+                   "Added Date":datetime.now(),})
+         importanttask.append(im_task)
+         print(f"----Your Important Task----""\n")
+         print(f"Task Name: {taskname}")
+         print(f"Type: {im_task['Type']}")
+         print(f"Added Date: {im_task['Added Date']}")
 
 
 
@@ -62,7 +79,7 @@ def menyu():
             "\n2-Important :"
             "\n3-Planned :"
             "\n4-Assigned to me :"
-            "\n5-Tasks :"
+            "\n5-My tasks :"
             "\n6-Quit :"  
             "\n------------")
         choice=int(input("Enter your choice:"))
