@@ -30,7 +30,28 @@ def time_frame(seconds):
         seconds-=1
     print("You're time is up!")
 
-
+def planned_task():
+    print("--Your Planned Tasks--")
+    taskname=input("Task name: ")
+    if taskname=="":
+        print("Task name can't be empty!")
+        return
+    deadline_sec = int(convert_to_sec())
+    if deadline_sec:
+        pl_task=({"Task":taskname,
+                  "Deadline":deadline_sec,
+                  "Type":"Planned",
+                  "Added Date":datetime.now().strftime("%d %b %Y, %H:%M"),})
+        plannedtask.append(pl_task)
+    print("\n----Your Daily Task----""\n")
+    print(f"Task Name: {taskname}")
+    print(f"Deadline(sec): {deadline_sec // 3600} hour(s)")
+    print(f"Type: {pl_task['Type']}")
+    print(f"Added Date: {pl_task['Added Date']}")
+    start = input("Start time ?(y/n):").lower()
+    if start == "y":
+        time_frame(pl_task["Deadline"])
+        return
 
 
 
@@ -79,8 +100,7 @@ def add_task():
     start=input("Start time ?(y/n):").lower()
     if start=="y":
         time_frame(task["Deadline"])
-    else:
-        menyu()
+        return
 
 
 def important_task(taskname,deadline):
@@ -108,36 +128,35 @@ def important_task(taskname,deadline):
              time_frame(im_task["Deadline"])
 
          else:
-             menyu()
-
+              return
 
 def menyu():
     while True:
         print("----MAIN----"
-            "\n1-My day :"
-            "\n2-Important :"
-            "\n3-Planned :"
-            "\n4-My tasks :"
-            "\n5-Quit :"  
-            "\n------------")
+              "\n1-My day :"
+              "\n2-Important :"
+              "\n3-Planned :"
+              "\n4-My tasks :"
+              "\n5-Quit :"
+              "\n------------")
         try:
-          choice=int(input("Enter your choice:"))
-          if choice==1:
-            add_task()
-          elif choice==2:
-            important_task()
-          elif choice==3:
-            pass
-          elif choice==4:
-            show_tasks()
-          elif choice==5:
-            print("You are logged out")
-            break
-          else:
-            print("Please enter a valid choice")
+            choice = int(input("Enter your choice:"))
+            if choice == 1:
+                add_task()
+            elif choice == 2:
+                important_task()
+            elif choice == 3:
+                planned_task()
+            elif choice == 4:
+                show_tasks()
+            elif choice == 5:
+                 print("You are logged out")
+                 break
+            else:
+                 print("Please enter a valid choice")
         except ValueError:
-            print("Please enter a number between (1-6)")
-menyu()
+                 print("Please enter a number between (1-6)")
+
 
 
 
