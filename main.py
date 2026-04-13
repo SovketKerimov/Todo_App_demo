@@ -1,15 +1,14 @@
-from functions import menyu
+from functions import systemmenyu,user_account,sign_up,log_in
+from models import Account
+
+
 
 
 class Taskmanage:
     def __init__(self):
         self.tasks=[]
 
-class Account:
-    def __init__(self):
-        self.name=None
-        self.password=None
-        self.email=None
+
 
     def log_in(self):
           self.name=input("Enter your name:")
@@ -32,21 +31,24 @@ if __name__ == "__main__":
         print("---Main Menu---")
         print("1. Sign Up")
         print("2. Log In")
-        print("3. Exit")
+        print("3. My Account")
+        print("4. Exit")
         try:
            choice = input("Choose option: ")
 
            if choice == "1":
-             account.sign_up()
-             menyu()
+             sign_up()
+             systemmenyu()
            elif choice == "2":
-            account.log_in()
-            menyu()
+            log_in()
+            systemmenyu()
            elif choice == "3":
+            user_account()
+           elif choice == "4":
             print("Goodbye!")
             break
            else:
               print("Please choose between (1-3)")
-              menyu()
+              systemmenyu()
         except ValueError:
             print("Please enter a valid option")
