@@ -2,9 +2,6 @@ from datetime import datetime
 import time
 
 
-from models import Session, Account
-
-accounts=[]
 dailytask=[]
 importask=[]
 plannedtask=[]
@@ -135,9 +132,9 @@ def important_task():
          else:
               return
 
-def systemmenyu():
+def menyu():
     while True:
-        print("----MENU----"
+        print("----MAIN----"
               "\n1-My day :"
               "\n2-Important :"
               "\n3-Planned :"
@@ -162,48 +159,6 @@ def systemmenyu():
         except ValueError:
                  print("Please enter a number between (1-6)")
 
-def log_in():
-    global our_user
-    name=input("Enter your name:")
-    password=input("Enter your password:")
-    for x in accounts:
-        if x.name==name and x.password==password:
-            name=x.name.capitalize()
-            Session.our_user = x
-            print(f"Welcome our dear user : {name}!")
-            return True
-    print("Please enter a correct username and password")
-    return False
 
-def sign_up():
-    global our_user
-    print("----Sign Up----")
-    try:
-       name=input("Enter your name:")
-       password=input("Enter your password(password>=8):")
-       while len(password)<=8 or not password.isdigit():
-           print("Password must be 8 or more characters\nTry to use digits!")
-           password = input("Enter your password(password>=8):")
-           continue
 
-       email=input("Enter your email:")
-       print(f"Nice to meet you {name}!")
-       Session.our_user = name
-       Session.our_password = password
-       Session.our_user.email = email
 
-    except ValueError:
-            print("Please enter correct username and password")
-def user_account():
-  global our_user
-  try:
-    if not Session.our_user:
-        print("You are not logged in")
-        return Account
-
-    user=Session.our_user
-    print("---My Account---")
-    print(f"Your username is :{user.name}")
-    print(f"Your email : {user.email}")
-  except ConnectionError:
-      print("You are not logged in")
