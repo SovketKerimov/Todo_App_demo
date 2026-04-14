@@ -177,15 +177,23 @@ def log_in():
 
 def sign_up():
     global our_user
+    print("----Sign Up----")
+    try:
+       name=input("Enter your name:")
+       password=input("Enter your password(password>=8):")
+       while len(password)<=8 or not password.isdigit():
+           print("Password must be 8 or more characters\nTry to use digits!")
+           password = input("Enter your password(password>=8):")
+           continue
 
-    name=input("Enter your name:")
-    password=input("Enter your password:")
-    email=input("Enter your email:")
+       email=input("Enter your email:")
+       print(f"Nice to meet you {name}!")
+       Session.our_user = name
+       Session.our_password = password
+       Session.our_user.email = email
 
-    user=Session.our_user
-    accounts.append(user)
-    name=name.capitalize()
-    print(f"Nice to see you : {name}")
+    except ValueError:
+            print("Please enter correct username and password")
 def user_account():
   global our_user
   try:
