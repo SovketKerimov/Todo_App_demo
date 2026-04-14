@@ -2,8 +2,6 @@ from functions import systemmenyu,user_account,sign_up,log_in
 from models import Account
 
 
-
-
 class Taskmanage:
     def __init__(self):
         self.tasks=[]
@@ -45,10 +43,11 @@ if __name__ == "__main__":
            elif choice == "3":
             user_account()
            elif choice == "4":
-            print("Goodbye!")
+            print(f"Goodbye {account.name}!")
             break
            else:
-              print("Please choose between (1-3)")
-              systemmenyu()
+              print("Please choose between (1-4)")
+
+
         except ValueError:
             print("Please enter a valid option")
