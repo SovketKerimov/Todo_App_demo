@@ -21,10 +21,12 @@ class Taskmanage:
         self.email = input("Enter your email:")
         print(f"We are pleased to see you {self.name}")
 
+
 if __name__ == "__main__":
     print("-Microsoft To Do App-")
     account = Account()
     taskmanage = Taskmanage()
+
     while True:
         print("---Main Menu---")
         print("1. Sign Up")
@@ -39,7 +41,7 @@ if __name__ == "__main__":
              systemmenyu()
            elif choice == "2":
             log_in()
-            systemmenyu()
+
            elif choice == "3":
             user_account()
            elif choice == "4":

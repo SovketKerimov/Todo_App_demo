@@ -1,7 +1,7 @@
 from datetime import datetime
 import time
-from logging import error
-from os import name
+
+
 
 from models import Session, Account
 
@@ -166,6 +166,9 @@ def systemmenyu():
 def log_in():
     global our_user
     name=input("Enter your name:")
+    if name.strip()=="":
+        print("Please enter a valid name")
+        log_in()
     password=input("Enter your password:")
     for x in accounts:
         if x.name==name and x.password==password:
@@ -174,30 +177,47 @@ def log_in():
             print(f"Welcome our dear user : {name}!")
             return True
     print("Please enter a correct username and password")
+    print("If you do not have an account create a new one")
     return False
 
 def sign_up():
-    global our_user
-
+  global our_user
+  try:
     name=input("Enter your name:")
-    password=input("Enter your password:")
-    while True:
-        if password==name:
-            print("Password can not be same as name")
-            password=input("Enter your password:")
-        elif len(password)<8:
-          print("Password must be 8 or more characters long")
-          password=input("Enter your password:")
+    if name.strip()=="":
+        print("Please enter a valid name")
+        sign_up()
+    else:
+        password=input("Enter your password:")
+        if password.strip()=="":
+            print("Please enter a valid password")
+            password = input("Enter your password:")
+            print("Please try again")
+            sign_up()
         else:
-          email=input("Enter your email:")
-          print(f"Nice to see you : {name}")
-          systemmenyu()
+         while True:
+            if password == name:
+                print("Password can not be same as name")
+                password = input("Enter your password:")
+            elif len(password) < 8:
+                print("Password must be 8 or more characters long")
+                password = input("Enter your password:")
+            else:
+                email = input("Enter your email:")
+                if email.strip()=="":
+                    print("Please enter a valid email")
+                    sign_up()
+                else:
+                    print(f"Nice to see you : {name}")
+                    systemmenyu()
 
+                user = Session.our_user
+                accounts.append(user)
+                name = name.capitalize()
+  except ValueError :
+      print("Something went wrong \n Please try again")
+      sign_up()
 
-
-          user=Session.our_user
-          accounts.append(user)
-          name=name.capitalize()
 def user_account():
   global our_user
   try:
