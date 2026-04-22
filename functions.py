@@ -1,38 +1,15 @@
 from datetime import datetime
+from deadlinesystem import convert_to_sec,timer,show_time
 import time
-
-
+import threading
 
 from models import Session, Account
-
 accounts=[]
 dailytask=[]
 importask=[]
 plannedtask=[]
 
-def convert_to_sec():
-    try:
-        hours=float(input("Enter deadline for your task(in hours) :"))
-        if hours<=0:
-           print("Please enter a positive number of hours")
-           return None
 
-        if hours>0:
-          seconds=int(hours*3600)
-        return seconds
-
-    except ValueError:
-        print("Invalid input" "\n" "Please enter deadline in hours")
-
-def time_frame(seconds):
-    while seconds>0:
-        days, remainder = divmod(seconds, 86400)
-        hours, remainder = divmod(remainder, 3600)
-        mins, secs = divmod(remainder, 60)
-        print(f"Time left:{days}d and {hours:02d}:{mins:02d}:{secs:02d} ")
-        time.sleep(1)
-        seconds-=1
-    print("You're time is up!")
 
 def planned_task():
     print("--Your Planned Tasks--")
@@ -50,13 +27,9 @@ def planned_task():
         plannedtask.append(pl_task)
     print("\n----Your Daily Task----""\n")
     print(f"Task Name: {taskname}")
-    print(f"Deadline(sec): {deadline_sec//3600} hour(s)")
+    print(f"Deadline(hour(s)): {deadline_sec//3600} hour(s)")
     print(f"Type: {pl_task['Type']}")
     print(f"Added Date: {pl_task['Added Date']}")
-    start = input("Start time ?(y/n):").lower()
-    if start == "y":
-        time_frame(pl_task["Deadline"])
-        return
 
 
 
@@ -70,16 +43,19 @@ def show_tasks():
     if dailytask:
         print("---Your Daily Tasks---")
         for i,task in enumerate(dailytask,1):
-            print(f"{i}. Task: {task['Task']} | Deadline : {task['Deadline']} | Added date : {task['Added Date']}")
+            time_display=show_time(task['Deadline'])
+            print(f"{i}. Task: {task['Task']} | Deadline : {time_display} | Added date : {task['Added Date']}")
 
     if importask:
         print("---Your Important Tasks---")
         for i,task in enumerate(importask,1):
-            print(f"{i}. Task: {task['Task']} | Deadline : {task['Deadline']} | Added date : {task['Added Date']}")
+            time_display=show_time(task['Deadline'])
+            print(f"{i}. Task: {task['Task']} | Deadline : {time_display} | Added date : {task['Added Date']}")
     if plannedtask:
         print("---Your Planned Tasks---")
         for i,task in enumerate(plannedtask,1):
-            print(f"{i}. Task: {task['Task']} | Deadline : {task['Deadline']} | Added date : {task['Added Date']} ")
+            time_display=show_time((task['Deadline']))
+            print(f"{i}. Task: {task['Task']} | Deadline : {time_display} | Added date : {task['Added Date']} ")
 
 def add_task():
     print("---Add Daily Task---")
@@ -87,10 +63,13 @@ def add_task():
     if taskname is None:
         print("Task name can't be empty!")
         return
+    deadline_sec = convert_to_sec()
 
-    deadline_sec = int(convert_to_sec())
-    if deadline_sec is False:
-           return
+    if deadline_sec:
+        # Start the background process
+        wait_time = deadline_sec - time.time()
+        t = threading.Thread(target=timer, args=(taskname, wait_time), daemon=True)
+        t.start()
 
     task=({"Task":taskname,
            "Deadline":deadline_sec,
@@ -102,11 +81,6 @@ def add_task():
     print(f"Deadline(sec): {deadline_sec//3600} hour(s)")
     print(f"Type: {task['Type']}")
     print(f"Added Date: {task['Added Date']}")
-    start=input("Start time ?(y/n):").lower()
-    if start=="y":
-        time_frame(task["Deadline"])
-        return
-
 
 def important_task():
      print("----Add an Important Task----")
@@ -128,13 +102,6 @@ def important_task():
          print(f"Deadline(sec): {deadline_sec // 3600} hour(s)")
          print(f"Type: {im_task['Type']}")
          print(f"Added Date: {im_task['Added Date']}")
-         start=input("Start time ?(y/n):").lower()
-
-         if start=="y":
-             time_frame(im_task["Deadline"])
-
-         else:
-              return
 
 def systemmenyu():
     while True:
@@ -185,16 +152,16 @@ def sign_up():
   try:
     name=input("Enter your name:")
     if name.strip()=="":
-        print("Please enter a valid name")
-        sign_up()
+      print("Please enter a valid name")
+      sign_up()
     else:
-        password=input("Enter your password:")
-        if password.strip()=="":
+      password=input("Enter your password:")
+      if password.strip()=="":
             print("Please enter a valid password")
             password = input("Enter your password:")
             print("Please try again")
             sign_up()
-        else:
+      else:
          while True:
             if password == name:
                 print("Password can not be same as name")
@@ -208,16 +175,20 @@ def sign_up():
                     print("Please enter a valid email")
                     sign_up()
                 else:
+                    new_user = Account()
+                    new_user.name = name
+                    new_user.password = password
+                    new_user.email = email
+
+                    accounts.append(new_user)  # Now accounts actually has data
+                    Session.our_user = new_user
                     print(f"Nice to see you : {name}")
                     systemmenyu()
 
-                user = Session.our_user
-                accounts.append(user)
-                name = name.capitalize()
-  except ValueError :
-      print("Something went wrong \n Please try again")
-      sign_up()
 
+  except ValueError:
+      print("Please try again")
+      sign_up()
 def user_account():
   global our_user
   try:
